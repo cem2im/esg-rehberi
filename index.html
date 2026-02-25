@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#C8102E">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚕️</text></svg>">
+<title>ESG Rehberim — Hazırlık & Takip</title>
+<style>
+:root{--bx:#C8102E;--bx-l:rgba(200,16,46,.08);--bx-m:rgba(200,16,46,.15);--dark:#1a1a1a;--body:#444;--muted:#999;--light:#f5f4f2;--card:#fff;--border:#e8e6e3;--green:#1a8d4e;--green-l:rgba(26,141,78,.08);--orange:#e67e22;--orange-l:rgba(230,126,34,.08);--red:#c0392b;--red-l:rgba(192,57,43,.08);--blue:#2980b9;--blue-l:rgba(41,128,185,.08);--purple:#8e44ad;--purple-l:rgba(142,68,173,.08);--sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;--r:16px;--sh:0 2px 16px rgba(0,0,0,.06)}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{font-size:16px;-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{font-family:var(--sans);color:var(--body);background:var(--light);line-height:1.5;min-height:100dvh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* Screens */
+.scr{display:none;min-height:100dvh;padding-bottom:100px}.scr.on{display:block;animation:up .35s ease}
+@keyframes up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+/* Wizard */
+.wiz{min-height:100dvh;display:flex;flex-direction:column;justify-content:center;padding:32px 24px;text-align:center}
+.wiz-step{display:none}.wiz-step.on{display:block;animation:up .3s ease}
+.wiz-emoji{font-size:64px;margin-bottom:16px}
+.wiz h2{font-size:26px;font-weight:700;color:var(--dark);line-height:1.3;margin-bottom:8px}
+.wiz p.wiz-sub{font-size:16px;color:var(--muted);margin-bottom:28px;line-height:1.5}
+.wiz-input{width:100%;padding:18px 20px;border:2px solid var(--border);border-radius:14px;font-size:20px;font-family:var(--sans);color:var(--dark);background:var(--card);text-align:center;appearance:none;-webkit-appearance:none}
+.wiz-input:focus{outline:none;border-color:var(--bx)}
+.opts2{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:360px;margin:0 auto}
+.opt2{display:flex;flex-direction:column;align-items:center;gap:8px;padding:24px 16px;border:2.5px solid var(--border);border-radius:16px;background:var(--card);cursor:pointer;transition:all .2s;text-align:center}
+.opt2:active{transform:scale(.97)}.opt2.sel{border-color:var(--bx);background:var(--bx-l)}
+.opt2 .o2-ico{font-size:40px}.opt2 h3{font-size:16px;font-weight:700;color:var(--dark)}.opt2 p{font-size:12px;color:var(--muted)}
+.btn{display:block;width:100%;max-width:360px;margin:24px auto 0;padding:18px;border:none;border-radius:14px;font-size:18px;font-weight:700;font-family:var(--sans);cursor:pointer;transition:all .15s;letter-spacing:.3px}
+.btn:active{transform:scale(.97)}.btn-primary{background:var(--bx);color:#fff}.btn-primary:disabled{opacity:.3;cursor:not-allowed;transform:none}
+.btn-ghost{background:none;color:var(--muted);font-size:14px;font-weight:500;margin-top:12px}
+.btn-outline{background:none;border:2px solid var(--bx);color:var(--bx)}
+
+/* Nav */
+.nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--border);padding:8px 0 env(safe-area-inset-bottom,10px);z-index:200;display:none}
+.nav.on{display:block}
+.nav-in{max-width:500px;margin:0 auto;display:flex;justify-content:space-around}
+.nb{display:flex;flex-direction:column;align-items:center;gap:3px;border:none;background:none;cursor:pointer;padding:6px 4px;color:var(--muted);font-size:10px;font-weight:600;font-family:var(--sans);transition:color .2s;min-width:52px}
+.nb .ni{font-size:22px;line-height:1;transition:transform .2s}.nb.on{color:var(--bx)}.nb.on .ni{transform:scale(1.15)}
+
+.box{max-width:480px;margin:0 auto;padding:0 20px}
+
+/* Hero card */
+.hero{background:var(--dark);color:#fff;border-radius:var(--r);padding:28px 24px;margin:20px 0 16px;text-align:center;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;top:-40px;right:-40px;width:140px;height:140px;border-radius:50%;background:rgba(200,16,46,.12)}
+.hero-label{font-size:12px;text-transform:uppercase;letter-spacing:2.5px;color:rgba(255,255,255,.45);margin-bottom:8px;font-weight:600}
+.hero-big{font-size:72px;font-weight:700;line-height:1;letter-spacing:-3px}
+.hero-unit{font-size:22px;color:var(--bx);font-weight:600;margin-left:2px}
+.hero-detail{font-size:14px;color:rgba(255,255,255,.55);margin-top:8px}
+
+/* Phase indicator */
+.phase-track{display:flex;gap:4px;margin:16px 0;padding:0 4px}
+.phase-dot{flex:1;height:6px;border-radius:3px;background:var(--border);transition:background .3s}
+.phase-dot.done{background:var(--green)}.phase-dot.active{background:var(--bx)}
+
+.phase-card{background:var(--card);border-radius:var(--r);padding:20px;margin:12px 0;box-shadow:var(--sh);position:relative;overflow:hidden}
+.phase-card.green{border-left:4px solid var(--green)}
+.phase-card.orange{border-left:4px solid var(--orange)}
+.phase-card.bx{border-left:4px solid var(--bx)}
+.phase-card.blue{border-left:4px solid var(--blue)}
+.phase-card.purple{border-left:4px solid var(--purple)}
+.pc-tag{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px}
+.pc-tag.green{color:var(--green)}.pc-tag.orange{color:var(--orange)}.pc-tag.bx{color:var(--bx)}.pc-tag.blue{color:var(--blue)}.pc-tag.purple{color:var(--purple)}
+.pc-title{font-size:20px;font-weight:700;color:var(--dark);margin-bottom:4px}
+.pc-desc{font-size:14px;color:var(--body);line-height:1.5}
+
+/* Progress */
+.prog{margin:16px 0 8px}.prog-bar{background:var(--border);border-radius:8px;height:8px;overflow:hidden}
+.prog-fill{height:100%;border-radius:8px;transition:width .6s ease}
+.prog-labels{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:6px;font-weight:500}
+
+/* Info cards */
+.info-card{background:var(--card);border-radius:var(--r);padding:20px;margin:12px 0;box-shadow:var(--sh)}
+.info-card h3{font-size:16px;font-weight:700;color:var(--dark);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.info-card p{font-size:14px;color:var(--body);line-height:1.6}
+
+/* Diet tabs */
+.dtabs{display:flex;gap:8px;padding:16px 0 12px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.dtabs::-webkit-scrollbar{display:none}
+.dtab{flex-shrink:0;padding:10px 18px;border-radius:24px;border:2px solid var(--border);background:var(--card);font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap}
+.dtab.on{background:var(--bx);border-color:var(--bx);color:#fff}
+
+/* Food items */
+.food-section{margin:12px 0}
+.food-section h4{font-size:14px;font-weight:700;color:var(--dark);margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.food-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.food-item{display:flex;align-items:center;gap:10px;padding:12px;background:var(--card);border-radius:12px;box-shadow:var(--sh);font-size:13px;color:var(--dark);font-weight:500}
+.food-item.yes{border-left:3px solid var(--green)}.food-item.no{border-left:3px solid var(--red);opacity:.7}
+.food-item.maybe{border-left:3px solid var(--orange)}
+.fi-ico{font-size:20px;flex-shrink:0}
+
+/* Tracker */
+.tracker{background:var(--card);border-radius:var(--r);padding:20px;margin:12px 0;box-shadow:var(--sh)}
+.tracker h3{font-size:15px;font-weight:700;color:var(--dark);margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
+.tracker h3 span{font-size:14px;font-weight:600;color:var(--bx)}
+.track-bar{background:var(--border);border-radius:8px;height:10px;overflow:hidden;margin-bottom:10px}
+.track-fill{height:100%;border-radius:8px;transition:width .4s ease}
+.track-btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.track-btn{width:48px;height:48px;border-radius:12px;border:2px solid var(--border);background:var(--card);font-size:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s}
+.track-btn.done{background:var(--bx-l);border-color:var(--bx)}
+.track-btn:active{transform:scale(.93)}
+
+/* Tasks */
+.task{display:flex;align-items:flex-start;gap:14px;background:var(--card);border-radius:14px;padding:16px;margin:8px 0;box-shadow:var(--sh);cursor:pointer;transition:all .2s}
+.task:active{transform:scale(.99)}
+.tck{width:28px;height:28px;border:2.5px solid var(--border);border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s;font-size:16px;margin-top:1px}
+.task.done .tck{background:var(--green);border-color:var(--green);color:#fff}.task.done{opacity:.6}
+.t-body{flex:1}.t-body h4{font-size:15px;font-weight:600;color:var(--dark);line-height:1.3}.t-body p{font-size:13px;color:var(--muted);margin-top:3px;line-height:1.4}
+
+/* Search */
+.search-wrap{position:relative;margin:12px 0}
+.search-wrap input{width:100%;padding:14px 16px 14px 44px;border:2px solid var(--border);border-radius:14px;font-size:16px;font-family:var(--sans);color:var(--dark);background:var(--card);appearance:none}
+.search-wrap input:focus{outline:none;border-color:var(--bx)}
+.search-wrap::before{content:'🔍';position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:18px}
+
+/* Alert banner */
+.alert{background:var(--red-l);border:2px solid var(--red);border-radius:var(--r);padding:16px 20px;margin:12px 0}
+.alert h4{font-size:15px;font-weight:700;color:var(--red);margin-bottom:4px}.alert p{font-size:13px;color:var(--body);line-height:1.5}
+.alert-green{background:var(--green-l);border-color:var(--green)}.alert-green h4{color:var(--green)}
+.alert-orange{background:var(--orange-l);border-color:var(--orange)}.alert-orange h4{color:var(--orange)}
+
+/* Emergency btn */
+.emer-btn{display:flex;align-items:center;justify-content:center;gap:12px;background:var(--red);color:#fff;border:none;border-radius:var(--r);padding:20px;margin:16px 0;width:100%;font-size:20px;font-weight:700;font-family:var(--sans);cursor:pointer;transition:all .15s}
+.emer-btn:active{transform:scale(.97)}
+
+/* Vitamin table */
+.vtable{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}
+.vtable th{text-align:left;padding:10px 8px;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);border-bottom:2px solid var(--dark);font-weight:600}
+.vtable td{padding:10px 8px;border-bottom:1px solid var(--border);vertical-align:top}
+.vtable td:first-child{font-weight:600;color:var(--dark)}
+
+/* Follow-up timeline */
+.timeline{position:relative;padding-left:24px;margin:16px 0}
+.timeline::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:var(--border)}
+.tl-item{position:relative;margin:16px 0;padding-left:20px}
+.tl-item::before{content:'';position:absolute;left:-20px;top:6px;width:14px;height:14px;border-radius:50%;background:var(--bx);border:3px solid var(--light)}
+.tl-item.done::before{background:var(--green)}
+.tl-item h4{font-size:14px;font-weight:700;color:var(--dark)}.tl-item p{font-size:13px;color:var(--muted);margin-top:2px}
+
+/* Section title */
+.sec-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--bx);margin:20px 0 10px;padding-top:8px}
+
+/* Kvkk */
+.kvkk{font-size:10px;color:var(--muted);text-align:center;margin:16px 0 8px;line-height:1.5}
+
+/* Weight log */
+.weight-entry{display:flex;gap:8px;margin:8px 0}
+.weight-entry input{flex:1;padding:12px;border:2px solid var(--border);border-radius:12px;font-size:16px;font-family:var(--sans);color:var(--dark);background:var(--card);text-align:center}
+.weight-entry input:focus{outline:none;border-color:var(--bx)}
+.weight-entry button{padding:12px 20px;border:none;border-radius:12px;background:var(--bx);color:#fff;font-size:16px;font-weight:700;font-family:var(--sans);cursor:pointer}
+
+/* Scrollbar hide */
+::-webkit-scrollbar{width:0;height:0}
+</style>
+</head>
+<body>
+
+<!-- ═══════ WIZARD ═══════ -->
+<div id="wizard" class="scr on">
+<div class="wiz">
+
+  <!-- Step 0: Welcome -->
+  <div class="wiz-step on" data-step="0">
+    <div class="wiz-emoji">⚕️</div>
+    <h2>ESG Rehberim</h2>
+    <p class="wiz-sub">Endoskopik Sleeve Gastroplasti işleminiz için hazırlık ve sonrası takip rehberiniz.</p>
+    <p class="wiz-sub" style="font-size:14px;color:var(--bx);font-weight:600">Doç. Dr. Cem Şimşek<br>Bariatrik Endoskopi</p>
+    <button class="btn btn-primary" onclick="wizNext(1)">Başlayalım</button>
+  </div>
+
+  <!-- Step 1: TC Kimlik -->
+  <div class="wiz-step" data-step="1">
+    <div class="wiz-emoji">🔐</div>
+    <h2>Kimlik Doğrulama</h2>
+    <p class="wiz-sub">TC Kimlik numaranızı girin. Verileriniz sadece bu cihazda güvenli olarak saklanır.</p>
+    <input type="tel" class="wiz-input" id="tcInput" placeholder="TC Kimlik No (11 hane)" maxlength="11" inputmode="numeric" oninput="validateTC()">
+    <button class="btn btn-primary" id="tcBtn" disabled onclick="wizSetTC()">Doğrula</button>
+    <p class="kvkk">🔒 KVKK kapsamında verileriniz yalnızca bu cihazda saklanır, sunucuya gönderilmez.</p>
+  </div>
+
+  <!-- Step 2: Date -->
+  <div class="wiz-step" data-step="2">
+    <div class="wiz-emoji">📅</div>
+    <h2>İşlem Tarihiniz</h2>
+    <p class="wiz-sub">Endoskopik Sleeve Gastroplasti işleminiz ne zaman?</p>
+    <input type="date" class="wiz-input" id="dateInput" onchange="validateDate()">
+    <button class="btn btn-primary" id="dateBtn" disabled onclick="wizNext(3)">Devam</button>
+  </div>
+
+  <!-- Step 3: Time -->
+  <div class="wiz-step" data-step="3">
+    <div class="wiz-emoji">🕐</div>
+    <h2>İşlem Saati</h2>
+    <p class="wiz-sub">İşleminiz sabah mı öğleden sonra mı?</p>
+    <div class="opts2">
+      <div class="opt2" onclick="selTime('morning',this)"><div class="o2-ico">🌅</div><h3>Sabah</h3><p>08:00 – 12:00</p></div>
+      <div class="opt2" onclick="selTime('afternoon',this)"><div class="o2-ico">🌇</div><h3>Öğleden Sonra</h3><p>13:00 – 17:00</p></div>
+    </div>
+    <button class="btn btn-primary" id="timeBtn" disabled onclick="wizFinish()">Rehberi Başlat</button>
+  </div>
+
+</div>
+</div>
+
+<!-- ═══════ MAIN APP ═══════ -->
+
+<!-- HOME -->
+<div id="s-home" class="scr">
+<div class="box">
+  <div id="homeHero" class="hero">
+    <div class="hero-label" id="heroLabel">İŞLEME KALAN</div>
+    <div class="hero-big" id="heroBig">--</div>
+    <div class="hero-detail" id="heroDetail"></div>
+  </div>
+
+  <div id="phaseTrack" class="phase-track"></div>
+
+  <div id="currentPhase"></div>
+
+  <div id="homeCards"></div>
+
+  <div class="info-card" style="text-align:center;margin-top:20px">
+    <p style="font-size:13px;color:var(--muted)">Doç. Dr. Cem Şimşek · Bariatrik Endoskopi</p>
+    <button class="btn btn-ghost" onclick="resetApp()" style="margin-top:8px;font-size:12px">⚙️ Ayarları Sıfırla</button>
+  </div>
+</div>
+</div>
+
+<!-- DIET -->
+<div id="s-diet" class="scr">
+<div class="box">
+  <div class="sec-title" style="margin-top:16px">🍽️ Beslenme Rehberi</div>
+
+  <div id="dietPhaseTabs" class="dtabs"></div>
+
+  <div id="dietContent"></div>
+
+  <div class="sec-title">🔍 Bu Yenilir Mi?</div>
+  <div class="search-wrap">
+    <input type="text" id="foodSearch" placeholder="Yiyecek ara... (örn: yoğurt)" oninput="searchFood()">
+  </div>
+  <div id="foodResults"></div>
+</div>
+</div>
+
+<!-- TRACKING -->
+<div id="s-track" class="scr">
+<div class="box">
+  <div class="sec-title" style="margin-top:16px">💧 Günlük Takip</div>
+
+  <div id="proteinTracker" class="tracker">
+    <h3>🥩 Protein <span id="proteinCount">0 / 60 g</span></h3>
+    <div class="track-bar"><div class="track-fill" id="proteinFill" style="width:0%;background:var(--bx)"></div></div>
+    <div class="track-btns" id="proteinBtns"></div>
+  </div>
+
+  <div id="hydrationTracker" class="tracker">
+    <h3>💧 Sıvı Alımı <span id="hydroCount">0 / 2000 ml</span></h3>
+    <div class="track-bar"><div class="track-fill" id="hydroFill" style="width:0%;background:linear-gradient(90deg,#4FC3F7,#0288D1)"></div></div>
+    <div class="track-btns" id="hydroBtns"></div>
+  </div>
+
+  <div class="sec-title">⚖️ Kilo Takibi</div>
+  <div class="weight-entry">
+    <input type="number" id="weightInput" placeholder="kg" step="0.1" min="30" max="300">
+    <button onclick="logWeight()">Kaydet</button>
+  </div>
+  <div id="weightLog"></div>
+</div>
+</div>
+
+<!-- TASKS -->
+<div id="s-tasks" class="scr">
+<div class="box">
+  <div class="sec-title" style="margin-top:16px">✅ Kontrol Listesi</div>
+  <div id="tasksList"></div>
+</div>
+</div>
+
+<!-- INFO -->
+<div id="s-info" class="scr">
+<div class="box">
+  <div class="sec-title" style="margin-top:16px">📋 Bilgi & Acil</div>
+
+  <a href="tel:112" class="emer-btn" style="text-decoration:none">🚨 ACİL DURUM — 112'yi Ara</a>
+
+  <div class="alert">
+    <h4>⚠️ Acil — Hemen Başvurun</h4>
+    <p>• Şiddetli, artan karın ağrısı<br>• 38.5°C üzeri ateş<br>• Sürekli kusma (sıvı tutamama)<br>• Kanlı kusma / kanlı-siyah dışkı<br>• Göğüs ağrısı / nefes darlığı</p>
+  </div>
+
+  <div class="alert alert-green">
+    <h4>✅ Normal (Beklenen) Belirtiler</h4>
+    <p>• Hafif-orta karın ağrısı (3–5 gün)<br>• Bulantı (ilk 2–3 gün)<br>• Boğaz ağrısı (1–2 gün)<br>• Gaz, şişkinlik, omuz ağrısı<br>• Halsizlik (ilk hafta)</p>
+  </div>
+
+  <div class="sec-title">💊 Vitamin & Takviye</div>
+  <div class="info-card">
+    <table class="vtable">
+      <tr><th>Takviye</th><th>Doz</th><th>Başlangıç</th></tr>
+      <tr><td>Multivitamin</td><td>1–2 tablet/gün (çiğneme)</td><td>2. hafta</td></tr>
+      <tr><td>Kalsiyum + D</td><td>1200–1500mg + 3000 IU</td><td>2. hafta</td></tr>
+      <tr><td>B12</td><td>1000 mcg/gün oral</td><td>2. hafta</td></tr>
+      <tr><td>PPI (Mide koruyucu)</td><td>Doktor reçetesiyle</td><td>Hemen</td></tr>
+    </table>
+  </div>
+
+  <div class="sec-title">📅 Takip Randevuları</div>
+  <div class="info-card">
+    <div class="timeline" id="followupTimeline"></div>
+  </div>
+
+  <div class="sec-title">⚠️ GLP-1 İlaç Uyarısı</div>
+  <div class="alert alert-orange">
+    <h4>Ozempic, Wegovy, Mounjaro, Saxenda...</h4>
+    <p>GLP-1 agonistleri mide boşalmasını yavaşlatır. Anestezi sırasında aspirasyon riski oluşturur. <strong>İşlemden en az 1–3 hafta önce</strong> doktorunuzla görüşerek kesilmelidir.</p>
+  </div>
+
+  <div class="sec-title">📞 İletişim</div>
+  <div class="info-card">
+    <h3>👨‍⚕️ Doç. Dr. Cem Şimşek</h3>
+    <p>Bariatrik Endoskopi / Gastroenteroloji<br>
+    📱 <a href="tel:+905342964684" style="color:var(--bx);font-weight:600">0534 296 46 84</a><br>
+    <span style="font-size:12px;color:var(--muted)">Sorun durumunda 7/24 ulaşılabilir</span></p>
+  </div>
+
+  <div class="info-card" style="text-align:center">
+    <p style="font-size:11px;color:var(--muted)">Bu rehber güncel uluslararası kılavuzlara dayanmaktadır.<br>ASMBS 2025 · IFSO 2024 · ASGE/ESGE · NICE IPG783<br>Doktorunuzun size özel talimatlarına uyunuz.</p>
+  </div>
+</div>
+</div>
+
+<!-- NAV -->
+<div id="nav" class="nav">
+<div class="nav-in">
+  <button class="nb on" onclick="go('home')"><span class="ni">🏠</span>Ana Sayfa</button>
+  <button class="nb" onclick="go('diet')"><span class="ni">🍽️</span>Beslenme</button>
+  <button class="nb" onclick="go('track')"><span class="ni">💧</span>Takip</button>
+  <button class="nb" onclick="go('tasks')"><span class="ni">✅</span>Görevler</button>
+  <button class="nb" onclick="go('info')"><span class="ni">ℹ️</span>Bilgi</button>
+</div>
+</div>
+
+<script>
+// ═══════ DATA ═══════
+
+const PHASES = [
+  {id:'pre2w', name:'İşlem Öncesi Diyet', tag:'2 Hafta Önce', color:'purple', dayRange:[-14,-3],
+   desc:'Düşük kalorili, yüksek proteinli diyet ile karaciğer yağlanmasını azaltın.'},
+  {id:'pre3d', name:'Sıvı Diyet', tag:'Son 2-3 Gün', color:'orange', dayRange:[-3,-1],
+   desc:'Tamamen sıvı diyete geçin: su, berrak et suyu, protein shake, sade çay.'},
+  {id:'npo', name:'Açlık (NPO)', tag:'İşlem Günü', color:'bx', dayRange:[0,0],
+   desc:'Gece yarısından itibaren hiçbir şey yemeyin/içmeyin. Refakatçi zorunludur.'},
+  {id:'phase1', name:'Berrak Sıvı', tag:'Faz 1 · 0–3. Gün', color:'blue', dayRange:[0,3],
+   desc:'Hidrasyon odaklı. 15 dk\'da 30-60 ml küçük yudumlar. Günde 1.5-2 litre.'},
+  {id:'phase2', name:'Tam Sıvı + Protein', tag:'Faz 2 · 3–14. Gün', color:'green', dayRange:[3,14],
+   desc:'Günde 60-90g protein + 2+ litre sıvı. Günde 2-3 protein shake.'},
+  {id:'phase3', name:'Yumuşak Gıda', tag:'Faz 3 · 2–4. Hafta', color:'orange', dayRange:[14,28],
+   desc:'Çatalla ezilecek kıvam. Önce proteini yiyin! 3 küçük öğün + 1 atıştırmalık.'},
+  {id:'phase4', name:'Normal Sağlıklı Diyet', tag:'Faz 4 · 4. Hafta+', color:'bx', dayRange:[28,9999],
+   desc:'Önce protein → sonra sebze → en son karbonhidrat. Yaşam boyu kurallar.'},
+];
+
+// ESG Diet Food Database (phase-based)
+const FOODS = {
+  pre2w: {
+    yes:[ ['🍗','Tavuk, balık, hindi (ızgara)'],['🥚','Yumurta'],['🧀','Lor/süzme peynir'],['🥛','Yağsız yoğurt'],
+          ['🥦','Tüm sebzeler (pişmiş/çiğ)'],['🍞','Tam tahıl ekmek (1-2 dilim)'],['💧','Bol su (2.5+ lt/gün)'],['🫘','Baklagiller (az)'] ],
+    no:[ ['🌭','İşlenmiş et (sucuk, salam)'],['🍕','Beyaz ekmek, makarna, börek, pizza'],['🍫','Şekerli gıdalar, çikolata'],
+         ['🥤','Gazlı içecekler'],['🍟','Kızartılmış/yağlı gıdalar'],['🍺','Alkol'],['🍔','Fast-food, hazır gıdalar'] ]
+  },
+  pre3d: {
+    yes:[ ['💧','Su'],['🍵','Sade çay (kafeinsiz)'],['🍲','Berrak et/tavuk suyu'],['🥤','Süzülmüş çorba'],
+          ['🧋','Protein shake'],['🧃','Süzülmüş elma suyu'] ],
+    no:[ ['🍖','Tüm katı gıdalar'],['☕','Kafeinli içecekler'],['🥛','Süt ürünleri'],['🧃','Posalı meyve suları'] ]
+  },
+  phase1: {
+    yes:[ ['💧','Su'],['🍵','Sade çay (kafeinsiz)'],['🍲','Berrak et/tavuk suyu'],['🍮','Şekersiz jelatin'],
+          ['🧃','Süzülmüş elma suyu (berrak)'],['🧋','Berrak protein içeceği'] ],
+    no:[ ['🍖','Tüm katı gıdalar'],['☕','Kafein'],['🥛','Süt ürünleri'],['🥤','Gazlı içecekler'],
+         ['🧃','Posalı sıvılar'],['🥤','Pipet kullanmayın'] ]
+  },
+  phase2: {
+    yes:[ ['🧋','Protein shake (20-30g)'],['🍲','Süzülmüş çorbalar'],['🥛','Yağsız süt'],['🥣','Sade yoğurt'],
+          ['🧃','Ayran'],['💧','Su (2+ lt/gün)'],['🍵','Sade çay'],['🍲','Berrak et suyu'] ],
+    no:[ ['🍖','Katı gıdalar'],['🍟','Yağlı gıdalar'],['🥤','Gazlı içecekler'],['🍫','Şekerli gıdalar'],
+         ['☕','Fazla kafein'],['🥤','Pipet kullanmayın'] ]
+  },
+  phase3: {
+    yes:[ ['🥚','Yumurta (rafadan/omlet)'],['🐟','Yumuşak balık, ton konserve'],['🥩','İnce kıyma'],['🧀','Lor peyniri'],
+          ['🎃','Kabak, havuç, patates ezmesi'],['🥑','Avokado, muz (ezme)'],['🍎','Elma püresi, komposto'],
+          ['🫘','Mercimek ezmesi, humus'],['🧀','Krem peynir (az yağlı)'],['🍝','Yumuşak makarna (az)'] ],
+    no:[ ['🥖','Sert ekmek, kuru gıdalar'],['🥩','Sert/lifli et'],['🌽','Çiğ sebzeler'],['🍟','Kızartmalar'],
+         ['🥤','Gazlı içecekler'],['🍫','Şekerli gıdalar'],['🌶️','Baharatlı gıdalar'] ]
+  },
+  phase4: {
+    yes:[ ['🍗','Tavuk, hindi (ızgara/haşlama)'],['🐟','Balık'],['🥚','Yumurta'],['🧀','Peynir (az yağlı)'],
+          ['🫘','Baklagiller'],['🥦','Tüm sebzeler'],['🍎','Meyveler'],['🍞','Tam tahıl (az miktar)'],
+          ['💧','2+ litre su/gün'],['🥗','Salata'] ],
+    no:[ ['🥤','Gazlı içecekler (YAŞAM BOYU)'],['🍫','Şekerli gıdalar/içecekler'],['🍔','Fast-food'],
+         ['🍟','Kızartmalar'],['🍺','Alkol (ilk 6-12 ay)'],['🍿','Sürekli atıştırma'] ]
+  }
+};
+
+// Tasks per phase
+const TASKS = {
+  pre2w: [
+    {t:'Kan tahlillerimi yaptırdım', d:'Tam kan, KC/böbrek, tiroid, HbA1c, lipid, demir, B12, D vit.'},
+    {t:'Anestezi değerlendirmesi tamamlandı', d:'Ön değerlendirme, EKG, akciğer grafisi'},
+    {t:'Diyetisyen görüşmesini yaptım', d:'Beslenme alışkanlıkları, vitamin düzeyleri'},
+    {t:'2 haftalık diyete başladım', d:'Düşük kalorili, yüksek proteinli'},
+    {t:'İlaçlarımı doktorumla gözden geçirdim', d:'Kan sulandırıcılar, diyabet ilaçları'},
+    {t:'GLP-1 ilacım varsa kesildi', d:'Ozempic, Wegovy, Mounjaro — 1-3 hafta önce'},
+    {t:'NSAİD kesildi (7 gün önce)', d:'İbuprofen, Naproksen → Parasetamol kullanılabilir'},
+    {t:'Sigara bırakma sürecinde', d:'En az 4 hafta önce bırakın'},
+    {t:'Alkol kesildi (2 hafta önce)', d:''},
+    {t:'Protein shake ve vitaminleri aldım', d:'İşlem sonrası için hazırlık'},
+    {t:'Yumuşak gıda malzemeleri aldım', d:'Faz 3 için önceden hazırlık'},
+    {t:'Refakatçim hazır', d:'İşlem günü zorunlu'},
+  ],
+  pre3d: [
+    {t:'Tamamen sıvı diyete geçtim', d:'Su, berrak et suyu, protein shake, sade çay'},
+    {t:'Protein shake içmeye devam', d:'Günde 2-3 protein shake'},
+    {t:'Bol su içiyorum', d:'Günde 2+ litre'},
+    {t:'NPO kuralını biliyorum', d:'Gece yarısından itibaren aç kalacağım'},
+  ],
+  npo: [
+    {t:'Gece yarısından beri aç', d:'Hiçbir şey yemeyin/içmeyin'},
+    {t:'Onaylı ilaçları az su ile aldım', d:'Doktor onayı ile'},
+    {t:'Refakatçim benimle', d:'İşlem sonrası eve götürecek'},
+    {t:'Rahat kıyafet giydim', d:''},
+  ],
+  phase1: [
+    {t:'15 dk\'da 30-60 ml su yudumladım', d:'Küçük yudumlar, yavaşça'},
+    {t:'Berrak et suyu/tavuk suyu içtim', d:''},
+    {t:'Sıvı alımımı kaydettim', d:'Günde 1.5-2 litre hedefi'},
+    {t:'İlaçlarımı aldım', d:'PPI + reçeteli ilaçlar'},
+    {t:'Pipet kullanmadım', d:'Gaz yapabilir'},
+    {t:'Yürüyüş yaptım (5-10 dk)', d:'Ev içi kısa yürüyüşler'},
+  ],
+  phase2: [
+    {t:'Protein shake içtim (2-3 adet)', d:'Her biri 20-30g protein'},
+    {t:'Toplam 60g protein hedefine ulaştım', d:''},
+    {t:'2+ litre sıvı aldım', d:'Protein shake dahil değil'},
+    {t:'Vitamin takviyesine başladım', d:'Multivitamin + Kalsiyum + D + B12'},
+    {t:'Yürüyüş süresini artırdım', d:'20-30 dakika'},
+  ],
+  phase3: [
+    {t:'Önce proteini yedim', d:'Her öğünde ilk protein'},
+    {t:'Çatalla ezilecek kıvamda yedim', d:'Yumuşak gıdalar'},
+    {t:'3 küçük öğün + 1 atıştırmalık', d:'Her öğün 15-20 dk'},
+    {t:'Yavaş çiğnedim (20+ kez)', d:''},
+    {t:'Tok olunca durdum', d:'Fazla yemeyin'},
+    {t:'Vitaminlerimi aldım', d:''},
+    {t:'Protein shake devam (günde 1)', d:''},
+  ],
+  phase4: [
+    {t:'Protein → Sebze → Karbonhidrat sırası', d:'Her öğünde bu sırayı takip edin'},
+    {t:'Çay tabağı boyutu porsiyon', d:'Küçük porsiyonlar'},
+    {t:'Yemekle içmeyi ayırdım', d:'15 dk önce bırak, 30 dk sonra başla'},
+    {t:'2+ litre su içtim (öğün arası)', d:''},
+    {t:'Vitaminlerimi aldım', d:''},
+    {t:'Egzersiz yaptım (150+ dk/hafta)', d:'Yürüyüş, bisiklet, yüzme'},
+    {t:'Yemek günlüğü tuttum', d:''},
+    {t:'Gazlı içecek içmedim', d:'Yaşam boyu yasak'},
+  ],
+};
+
+const FOLLOWUP = [
+  {time:'1. Hafta', desc:'Telefon/online — iyileşme, sıvı alımı, ilaç uyumu'},
+  {time:'2. Hafta', desc:'Muayene — yumuşak gıdaya geçiş, vitamin başlangıcı'},
+  {time:'1. Ay', desc:'Diyetisyen — normal diyete geçiş, kilo takibi'},
+  {time:'3. Ay', desc:'Kan tahlili — vitamin düzeyleri, kilo değerlendirmesi'},
+  {time:'6. Ay', desc:'Kapsamlı kontrol — metabolik parametreler'},
+  {time:'12. Ay', desc:'Yıllık — endoskopi (gerekirse), uzun vadeli plan'},
+];
+
+// ═══════ STATE ═══════
+const SK = 'esgrehber1';
+let S = {};
+function load(){ try{S=JSON.parse(localStorage.getItem(SK))||{}}catch(e){S={}} }
+function save(){ localStorage.setItem(SK, JSON.stringify(S)) }
+
+// ═══════ TC VALIDATION ═══════
+function validateTC(){
+  const v = tcInput.value.replace(/\D/g,'');
+  tcInput.value = v;
+  tcBtn.disabled = !isValidTC(v);
+}
+function isValidTC(tc){
+  if(tc.length!==11||tc[0]==='0') return false;
+  const d=tc.split('').map(Number);
+  const s10=((d[0]+d[2]+d[4]+d[6]+d[8])*7-(d[1]+d[3]+d[5]+d[7]))%10;
+  if(s10!==d[9]) return false;
+  let sum=0; for(let i=0;i<10;i++) sum+=d[i];
+  return sum%10===d[10];
+}
+async function hashTC(tc){
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(tc));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+async function wizSetTC(){
+  const tc = tcInput.value;
+  if(!isValidTC(tc)) return;
+  const h = await hashTC(tc);
+  // Check existing
+  const allKeys = Object.keys(localStorage).filter(k=>k.startsWith(SK+'_'));
+  let found = null;
+  for(const k of allKeys){
+    try{const d=JSON.parse(localStorage.getItem(k)); if(d&&d.tch===h){found=k;break;}}catch(e){}
+  }
+  if(found){
+    S = JSON.parse(localStorage.getItem(found));
+    S._key = found;
+    save2();
+    localStorage.setItem(SK+'_current', found);
+    startApp();
+    return;
+  }
+  S = {tch:h, created:Date.now()};
+  const key = SK+'_'+Date.now();
+  S._key = key;
+  localStorage.setItem(key, JSON.stringify(S));
+  localStorage.setItem(SK+'_current', key);
+  wizNext(2);
+}
+function save2(){
+  if(S._key) localStorage.setItem(S._key, JSON.stringify(S));
+}
+
+// ═══════ WIZARD ═══════
+function wizNext(step){
+  document.querySelectorAll('.wiz-step').forEach(s=>s.classList.remove('on'));
+  document.querySelector(`.wiz-step[data-step="${step}"]`).classList.add('on');
+}
+function validateDate(){ dateBtn.disabled = !dateInput.value; }
+let selTimeVal = null;
+function selTime(val, el){
+  selTimeVal = val;
+  document.querySelectorAll('.opt2').forEach(o=>o.classList.remove('sel'));
+  el.classList.add('sel');
+  timeBtn.disabled = false;
+}
+function wizFinish(){
+  S.procDate = dateInput.value;
+  S.procTime = selTimeVal;
+  save2();
+  startApp();
+}
+
+// ═══════ APP START ═══════
+function startApp(){
+  document.getElementById('wizard').classList.remove('on');
+  document.getElementById('nav').classList.add('on');
+  go('home');
+}
+
+// ═══════ NAV ═══════
+function go(tab){
+  document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));
+  document.getElementById('s-'+tab).classList.add('on');
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('.nb').forEach(b=>{ if(b.textContent.trim().includes(getTabLabel(tab))) b.classList.add('on'); });
+  if(tab==='home') renderHome();
+  if(tab==='diet') renderDiet();
+  if(tab==='track') renderTrack();
+  if(tab==='tasks') renderTasks();
+  if(tab==='info') renderInfo();
+  window.scrollTo(0,0);
+}
+function getTabLabel(t){
+  return {home:'Ana Sayfa',diet:'Beslenme',track:'Takip',tasks:'Görevler',info:'Bilgi'}[t]||'';
+}
+
+// ═══════ PHASE LOGIC ═══════
+function getDaysSinceProc(){
+  if(!S.procDate) return null;
+  const proc = new Date(S.procDate+'T00:00:00');
+  const now = new Date();
+  now.setHours(0,0,0,0);
+  return Math.floor((now - proc)/(1000*60*60*24));
+}
+function getCurrentPhase(){
+  const days = getDaysSinceProc();
+  if(days===null) return PHASES[0];
+  // Pre-procedure phases
+  if(days < -14) return PHASES[0]; // pre2w
+  if(days < -3) return PHASES[0]; // pre2w
+  if(days < 0) return PHASES[1]; // pre3d
+  if(days === 0) return PHASES[2]; // npo (procedure day)
+  if(days <= 3) return PHASES[3]; // phase1
+  if(days <= 14) return PHASES[4]; // phase2
+  if(days <= 28) return PHASES[5]; // phase3
+  return PHASES[6]; // phase4
+}
+
+// ═══════ HOME ═══════
+function renderHome(){
+  const days = getDaysSinceProc();
+  const phase = getCurrentPhase();
+  const heroLabel = document.getElementById('heroLabel');
+  const heroBig = document.getElementById('heroBig');
+  const heroDetail = document.getElementById('heroDetail');
+
+  if(days === null || days < 0){
+    // Pre-procedure
+    const remaining = Math.abs(days || 0);
+    heroLabel.textContent = 'İŞLEME KALAN';
+    heroBig.innerHTML = remaining + '<span class="hero-unit">gün</span>';
+    const procDateObj = new Date(S.procDate+'T00:00:00');
+    heroDetail.textContent = procDateObj.toLocaleDateString('tr-TR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}) + ' · ' + (S.procTime==='morning'?'Sabah':'Öğleden Sonra');
+  } else {
+    // Post-procedure
+    heroLabel.textContent = 'İŞLEMDEN BU YANA';
+    heroBig.innerHTML = days + '<span class="hero-unit">gün</span>';
+    heroDetail.textContent = phase.name + ' · ' + phase.tag;
+  }
+
+  // Phase track
+  const track = document.getElementById('phaseTrack');
+  track.innerHTML = PHASES.map((p,i)=>{
+    const pi = PHASES.indexOf(phase);
+    const cls = i < pi ? 'done' : i === pi ? 'active' : '';
+    return `<div class="phase-dot ${cls}"></div>`;
+  }).join('');
+
+  // Current phase card
+  const cp = document.getElementById('currentPhase');
+  cp.innerHTML = `
+    <div class="phase-card ${phase.color}">
+      <div class="pc-tag ${phase.color}">${phase.tag}</div>
+      <div class="pc-title">${phase.name}</div>
+      <div class="pc-desc">${phase.desc}</div>
+    </div>`;
+
+  // Home cards
+  const cards = document.getElementById('homeCards');
+  let html = '';
+
+  if(days !== null && days < 0 && days >= -14){
+    // Pre-procedure diet progress
+    const totalDays = 14;
+    const elapsed = 14 + days; // days from start of 2-week diet
+    const pct = Math.min(100, Math.round(elapsed/totalDays*100));
+    html += `<div class="info-card">
+      <h3>🥗 İşlem Öncesi Diyet İlerlemesi</h3>
+      <div class="prog"><div class="prog-bar"><div class="prog-fill" style="width:${pct}%;background:var(--bx)"></div></div>
+      <div class="prog-labels"><span>${elapsed}. gün</span><span>${totalDays} gün</span></div></div>
+    </div>`;
+  }
+
+  if(days !== null && days >= 0){
+    // Post-procedure: protein and hydration summary
+    const today = todayKey();
+    const protein = (S.protein && S.protein[today]) || 0;
+    const hydro = (S.hydration && S.hydration[today]) || 0;
+    const pGoal = days <= 3 ? 0 : 60;
+    const hGoal = days <= 3 ? 1500 : 2000;
+    html += `<div class="info-card">
+      <h3>🥩 Bugünkü Protein</h3>
+      <div class="prog"><div class="prog-bar"><div class="prog-fill" style="width:${pGoal?Math.min(100,protein/pGoal*100):0}%;background:var(--bx)"></div></div>
+      <div class="prog-labels"><span>${protein}g</span><span>${pGoal}g</span></div></div>
+    </div>`;
+    html += `<div class="info-card">
+      <h3>💧 Bugünkü Sıvı</h3>
+      <div class="prog"><div class="prog-bar"><div class="prog-fill" style="width:${Math.min(100,hydro/hGoal*100)}%;background:linear-gradient(90deg,#4FC3F7,#0288D1)"></div></div>
+      <div class="prog-labels"><span>${hydro} ml</span><span>${hGoal} ml</span></div></div>
+    </div>`;
+  }
+
+  // Key rule for current phase
+  const rules = {
+    pre2w: '🎯 Protein hedefi: günde 60-80g. Karaciğer yağlanmasını azaltmak kritik!',
+    pre3d: '⚠️ Sadece berrak sıvılar! Katı gıda yok. Bol su için.',
+    npo: '🚫 Gece yarısından itibaren hiçbir şey yemeyin/içmeyin!',
+    phase1: '💧 Küçük yudumlar: 15 dk\'da 30-60 ml. Pipet kullanmayın!',
+    phase2: '🧋 Günde 2-3 protein shake. Vitamin takviyesine başlayın!',
+    phase3: '🍽️ Çatalla ezilecek kıvam. HER ÖĞÜNDE ÖNCE PROTEİN!',
+    phase4: '📏 Protein → Sebze → Karbonhidrat. Çay tabağı boyutu porsiyon.',
+  };
+  if(rules[phase.id]){
+    html += `<div class="alert alert-orange"><h4>📌 Günün Kuralı</h4><p>${rules[phase.id]}</p></div>`;
+  }
+
+  cards.innerHTML = html;
+}
+
+// ═══════ DIET ═══════
+let dietPhaseIdx = null;
+function renderDiet(){
+  const phase = getCurrentPhase();
+  const tabs = document.getElementById('dietPhaseTabs');
+
+  // Show relevant phases as tabs
+  const days = getDaysSinceProc() || -15;
+  let relevantPhases;
+  if(days < 0){
+    relevantPhases = PHASES.slice(0,2); // pre2w, pre3d
+  } else {
+    relevantPhases = PHASES.slice(3); // phase1-4
+  }
+
+  if(dietPhaseIdx === null){
+    dietPhaseIdx = PHASES.indexOf(phase);
+    if(!relevantPhases.includes(PHASES[dietPhaseIdx])) dietPhaseIdx = PHASES.indexOf(relevantPhases[0]);
+  }
+
+  tabs.innerHTML = relevantPhases.map((p,i)=>{
+    const active = PHASES.indexOf(p) === dietPhaseIdx ? 'on' : '';
+    return `<div class="dtab ${active}" onclick="setDietPhase(${PHASES.indexOf(p)})">${p.name}</div>`;
+  }).join('');
+
+  renderDietContent();
+}
+function setDietPhase(idx){
+  dietPhaseIdx = idx;
+  renderDiet();
+}
+function renderDietContent(){
+  const phase = PHASES[dietPhaseIdx];
+  const el = document.getElementById('dietContent');
+  const foods = FOODS[phase.id] || FOODS.phase4;
+
+  let html = `<div class="phase-card ${phase.color}" style="margin-bottom:16px">
+    <div class="pc-tag ${phase.color}">${phase.tag}</div>
+    <div class="pc-title">${phase.name}</div>
+    <div class="pc-desc">${phase.desc}</div>
+  </div>`;
+
+  // Allowed foods
+  if(foods.yes && foods.yes.length){
+    html += `<div class="food-section"><h4 style="color:var(--green)">✅ Tüketebilecekleriniz</h4><div class="food-grid">`;
+    foods.yes.forEach(f=>{ html += `<div class="food-item yes"><span class="fi-ico">${f[0]}</span>${f[1]}</div>`; });
+    html += `</div></div>`;
+  }
+
+  // Forbidden foods
+  if(foods.no && foods.no.length){
+    html += `<div class="food-section"><h4 style="color:var(--red)">🚫 Kaçınmanız Gerekenler</h4><div class="food-grid">`;
+    foods.no.forEach(f=>{ html += `<div class="food-item no"><span class="fi-ico">${f[0]}</span>${f[1]}</div>`; });
+    html += `</div></div>`;
+  }
+
+  // Phase-specific tips
+  const tips = {
+    pre2w: `<div class="alert alert-orange"><h4>💡 İpucu</h4><p>Her öğünde tabağınızın yarısını proteinle doldurun. Sebzeleri bol tüketin. Bol su için — günde en az 2.5 litre.</p></div>`,
+    pre3d: `<div class="alert alert-orange"><h4>💡 İpucu</h4><p>Protein shake'lerinizi içmeye devam edin. Berrak çorbalar (süzülmüş) ve bol su. Açlık hissederseniz berrak et suyu yudumlayin.</p></div>`,
+    phase1: `<div class="alert alert-orange"><h4>💡 İpucu</h4><p>1 ons (30ml) ölçüm kabı kullanın, 5 dk'da 1 yudum. Saatte 150 ml aşmayın. Yavaşça yudumlayin, tok hissedince durun.</p></div>`,
+    phase2: `<div class="info-card"><h3>📋 Örnek Günlük Plan</h3><p>
+      <strong>08:00</strong> Protein shake (20-30g)<br>
+      <strong>10:00</strong> Su veya düşük kalorili içecek<br>
+      <strong>12:00</strong> Protein shake<br>
+      <strong>14:00</strong> Süzülmüş çorba + su<br>
+      <strong>16:00</strong> Protein shake<br>
+      <strong>18:00</strong> Sade yoğurt + ayran<br>
+      <strong>20:00</strong> Su veya berrak çay</p></div>`,
+    phase3: `<div class="info-card"><h3>📋 Yemek Kuralları</h3><p>
+      • <strong>Önce protein</strong> — her öğünde ilk önce proteini yiyin<br>
+      • <strong>Yavaş çiğneyin</strong> — her lokmayı 20+ kez çiğneyin<br>
+      • <strong>15-20 dk öğün</strong> — acele etmeyin<br>
+      • <strong>Tok olunca durun</strong> — fazla zorlamayın<br>
+      • Günde 1 protein shake devam<br>
+      • Sıvıları yemekten ayrı için</p></div>`,
+    phase4: `<div class="info-card"><h3>📏 Sağlıklı Tabak Modeli</h3><p style="text-align:center;font-size:16px;margin:8px 0">
+      <span style="display:inline-block;background:var(--dark);color:var(--bx);padding:12px 20px;border-radius:10px;font-weight:700">½ PROTEİN</span>
+      <span style="display:inline-block;background:var(--green-l);color:var(--green);padding:12px 14px;border-radius:10px;font-weight:700">¼ SEBZE</span>
+      <span style="display:inline-block;background:var(--orange-l);color:var(--orange);padding:12px 14px;border-radius:10px;font-weight:700">¼ KARBONHİDRAT</span>
+      </p><p style="font-size:13px;color:var(--muted);text-align:center">Protein: Tavuk, balık, yumurta, lor, baklagil<br>Sebze: Renkli, lifli sebzeler<br>Karbonhidrat: Tam tahıl, az miktarda</p></div>`,
+  };
+  if(tips[phase.id]) html += tips[phase.id];
+
+  // Liquid separation rule
+  if(['phase3','phase4'].includes(phase.id)){
+    html += `<div class="alert alert-orange"><h4>🚰 Sıvı Kuralı</h4><p>Yemekten <strong>15 dk önce</strong> sıvıları bırakın. Yemek bittikten <strong>30 dk sonra</strong> tekrar su içmeye başlayın. Yemek sırasında su içmek mideyi aşırı doldurabilir.</p></div>`;
+  }
+
+  el.innerHTML = html;
+}
+
+// Food search
+function searchFood(){
+  const q = document.getElementById('foodSearch').value.toLowerCase().trim();
+  const el = document.getElementById('foodResults');
+  if(!q || q.length < 2){ el.innerHTML=''; return; }
+
+  const phase = getCurrentPhase();
+  const foods = FOODS[phase.id] || FOODS.phase4;
+  let results = [];
+
+  if(foods.yes) foods.yes.forEach(f=>{
+    if(f[1].toLowerCase().includes(q)) results.push({...f, type:'yes'});
+  });
+  if(foods.no) foods.no.forEach(f=>{
+    if(f[1].toLowerCase().includes(q)) results.push({...f, type:'no'});
+  });
+
+  // Also search all phases if no result
+  if(!results.length){
+    Object.entries(FOODS).forEach(([pid,fd])=>{
+      if(fd.yes) fd.yes.forEach(f=>{
+        if(f[1].toLowerCase().includes(q)) results.push({ico:f[0],txt:f[1],type:'yes',phase:pid});
+      });
+      if(fd.no) fd.no.forEach(f=>{
+        if(f[1].toLowerCase().includes(q)) results.push({ico:f[0],txt:f[1],type:'no',phase:pid});
+      });
+    });
+  }
+
+  if(!results.length){
+    el.innerHTML = `<div class="info-card"><p style="text-align:center">Sonuç bulunamadı. Doktorunuza danışın.</p></div>`;
+    return;
+  }
+
+  el.innerHTML = results.map(r=>{
+    const ico = r[0] || r.ico || '🍽️';
+    const txt = r[1] || r.txt || '';
+    const note = r.phase ? ` <span style="font-size:11px;color:var(--muted)">(${PHASES.find(p=>p.id===r.phase)?.name||r.phase})</span>` : '';
+    return `<div class="food-item ${r.type}"><span class="fi-ico">${ico}</span>${txt}${note}</div>`;
+  }).join('');
+}
+
+// ═══════ TRACKING ═══════
+function todayKey(){ return new Date().toISOString().slice(0,10); }
+
+function renderTrack(){
+  const days = getDaysSinceProc() || -15;
+  const today = todayKey();
+
+  // Protein
+  if(!S.protein) S.protein = {};
+  const protein = S.protein[today] || 0;
+  const pGoal = days >= 3 ? 60 : (days >= 0 ? 0 : 60);
+  document.getElementById('proteinCount').textContent = `${protein} / ${pGoal} g`;
+  document.getElementById('proteinFill').style.width = pGoal ? Math.min(100,protein/pGoal*100)+'%' : '0%';
+
+  const pBtns = document.getElementById('proteinBtns');
+  pBtns.innerHTML = [10,15,20,25,30].map(v=>`<div class="track-btn" onclick="addProtein(${v})">${v}g</div>`).join('');
+
+  // Hydration
+  if(!S.hydration) S.hydration = {};
+  const hydro = S.hydration[today] || 0;
+  const hGoal = days >= 0 && days <= 3 ? 1500 : 2000;
+  document.getElementById('hydroCount').textContent = `${hydro} / ${hGoal} ml`;
+  document.getElementById('hydroFill').style.width = Math.min(100,hydro/hGoal*100)+'%';
+
+  const hBtns = document.getElementById('hydroBtns');
+  hBtns.innerHTML = [30,60,100,150,200,250].map(v=>`<div class="track-btn" onclick="addHydro(${v})">${v>=1000?(v/1000)+'L':v}</div>`).join('');
+
+  // Weight log
+  renderWeightLog();
+}
+function addProtein(g){
+  const today = todayKey();
+  if(!S.protein) S.protein = {};
+  S.protein[today] = (S.protein[today]||0) + g;
+  save2(); renderTrack();
+}
+function addHydro(ml){
+  const today = todayKey();
+  if(!S.hydration) S.hydration = {};
+  S.hydration[today] = (S.hydration[today]||0) + ml;
+  save2(); renderTrack();
+}
+function logWeight(){
+  const w = parseFloat(document.getElementById('weightInput').value);
+  if(!w || w < 30 || w > 300) return;
+  if(!S.weights) S.weights = [];
+  S.weights.push({date:todayKey(), kg:w});
+  save2();
+  document.getElementById('weightInput').value = '';
+  renderWeightLog();
+}
+function renderWeightLog(){
+  const el = document.getElementById('weightLog');
+  if(!S.weights || !S.weights.length){ el.innerHTML='<p style="font-size:13px;color:var(--muted);text-align:center;margin-top:8px">Henüz kayıt yok</p>'; return; }
+  const recent = S.weights.slice(-10).reverse();
+  el.innerHTML = recent.map(w=>`<div class="info-card" style="padding:12px 16px;margin:6px 0;display:flex;justify-content:space-between;align-items:center">
+    <span style="font-size:13px;color:var(--muted)">${new Date(w.date).toLocaleDateString('tr-TR')}</span>
+    <span style="font-size:18px;font-weight:700;color:var(--dark)">${w.kg} kg</span>
+  </div>`).join('');
+
+  if(S.weights.length >= 2){
+    const first = S.weights[0].kg;
+    const last = S.weights[S.weights.length-1].kg;
+    const diff = (last - first).toFixed(1);
+    const color = diff < 0 ? 'var(--green)' : diff > 0 ? 'var(--red)' : 'var(--muted)';
+    el.innerHTML = `<div style="text-align:center;margin:8px 0"><span style="font-size:14px;font-weight:700;color:${color}">${diff > 0 ? '+' : ''}${diff} kg toplam değişim</span></div>` + el.innerHTML;
+  }
+}
+
+// ═══════ TASKS ═══════
+function renderTasks(){
+  const phase = getCurrentPhase();
+  const tasks = TASKS[phase.id] || TASKS.phase4;
+  const today = todayKey();
+  if(!S.tasks) S.tasks = {};
+  if(!S.tasks[today]) S.tasks[today] = {};
+
+  const el = document.getElementById('tasksList');
+  const done = Object.values(S.tasks[today]).filter(v=>v).length;
+  const total = tasks.length;
+  const pct = Math.round(done/total*100);
+
+  let html = `<div class="phase-card ${phase.color}" style="margin-bottom:12px">
+    <div class="pc-tag ${phase.color}">${phase.tag}</div>
+    <div class="pc-title">${phase.name} Görevleri</div>
+    <div class="prog" style="margin-top:8px"><div class="prog-bar"><div class="prog-fill" style="width:${pct}%;background:var(--green)"></div></div>
+    <div class="prog-labels"><span>${done} / ${total} tamamlandı</span><span>${pct}%</span></div></div>
+  </div>`;
+
+  tasks.forEach((t,i)=>{
+    const isDone = S.tasks[today][i];
+    html += `<div class="task ${isDone?'done':''}" onclick="toggleTask(${i})">
+      <div class="tck">${isDone?'✓':''}</div>
+      <div class="t-body"><h4>${t.t}</h4>${t.d?`<p>${t.d}</p>`:''}</div>
+    </div>`;
+  });
+
+  el.innerHTML = html;
+}
+function toggleTask(i){
+  const today = todayKey();
+  if(!S.tasks) S.tasks = {};
+  if(!S.tasks[today]) S.tasks[today] = {};
+  S.tasks[today][i] = !S.tasks[today][i];
+  save2(); renderTasks();
+}
+
+// ═══════ INFO ═══════
+function renderInfo(){
+  const el = document.getElementById('followupTimeline');
+  const days = getDaysSinceProc() || -15;
+  el.innerHTML = FOLLOWUP.map((f,i)=>{
+    // Simple "done" check based on days
+    const doneThresholds = [7,14,30,90,180,365];
+    const isDone = days >= doneThresholds[i];
+    return `<div class="tl-item ${isDone?'done':''}"><h4>${f.time}</h4><p>${f.desc}</p></div>`;
+  }).join('');
+}
+
+// ═══════ RESET ═══════
+function resetApp(){
+  if(!confirm('Tüm verileriniz silinecek. Emin misiniz?')) return;
+  const currentKey = localStorage.getItem(SK+'_current');
+  if(currentKey) localStorage.removeItem(currentKey);
+  localStorage.removeItem(SK+'_current');
+  S = {};
+  location.reload();
+}
+
+// ═══════ INIT ═══════
+function init(){
+  const currentKey = localStorage.getItem(SK+'_current');
+  if(currentKey){
+    try{
+      S = JSON.parse(localStorage.getItem(currentKey)) || {};
+      S._key = currentKey;
+      if(S.procDate){
+        startApp();
+        return;
+      }
+    }catch(e){}
+  }
+  document.getElementById('wizard').classList.add('on');
+}
+
+init();
+</script>
+</body>
+</html>
