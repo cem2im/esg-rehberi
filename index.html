@@ -174,6 +174,32 @@ body{font-family:var(--sans);color:var(--body);background:var(--light);line-heig
 .dtabs::-webkit-scrollbar{display:none}
 .dtab{flex-shrink:0;padding:10px 16px;border-radius:24px;border:2px solid var(--border);background:var(--card);font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap}
 .dtab.on{background:var(--bx);border-color:var(--bx);color:#fff}
+
+/* Accordion */
+.acc{margin:10px 0}
+.acc-item{background:var(--card);border-radius:var(--r);margin:8px 0;box-shadow:var(--sh);overflow:hidden}
+.acc-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;cursor:pointer;border:none;background:none;width:100%;font-family:var(--sans);text-align:left;transition:background .2s}
+.acc-head:active{background:var(--light)}
+.acc-head h4{font-size:15px;font-weight:700;color:var(--dark);display:flex;align-items:center;gap:8px;flex:1}
+.acc-arrow{font-size:14px;color:var(--muted);transition:transform .3s;flex-shrink:0}
+.acc-item.open .acc-arrow{transform:rotate(180deg)}
+.acc-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.acc-item.open .acc-body{max-height:3000px}
+.acc-inner{padding:0 20px 20px;font-size:14px;color:var(--body);line-height:1.7}
+.acc-inner h5{font-size:14px;font-weight:700;color:var(--dark);margin:14px 0 6px}
+.acc-inner ul{padding-left:18px;margin:6px 0}.acc-inner li{margin:4px 0}
+.acc-inner .stat-row{display:flex;gap:10px;margin:10px 0;flex-wrap:wrap}
+.acc-inner .stat-box{flex:1;min-width:100px;background:var(--light);border-radius:12px;padding:14px;text-align:center}
+.acc-inner .stat-box .sn{font-size:26px;font-weight:700;color:var(--bx);line-height:1}
+.acc-inner .stat-box .sl{font-size:11px;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:.5px}
+.acc-inner .compare-table{width:100%;border-collapse:collapse;font-size:13px;margin:10px 0}
+.acc-inner .compare-table th{text-align:left;padding:8px;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);border-bottom:2px solid var(--dark)}
+.acc-inner .compare-table td{padding:8px;border-bottom:1px solid var(--border);vertical-align:top}
+.acc-inner .compare-table td:first-child{font-weight:600;color:var(--dark);width:30%}
+.dr-card{background:linear-gradient(135deg,var(--dark),#2a2a2a);border-radius:var(--r);padding:24px;color:#fff;margin:12px 0}
+.dr-card h3{font-size:18px;font-weight:700;margin-bottom:8px}.dr-card p{font-size:13px;line-height:1.7;color:rgba(255,255,255,.8)}
+.dr-card .dr-badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.dr-card .dr-badge{background:rgba(200,16,46,.2);color:var(--bx);font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px}
 </style>
 </head>
 <body>
@@ -305,6 +331,210 @@ body{font-family:var(--sans);color:var(--body);background:var(--light);line-heig
 </div>
 </div>
 
+<!-- ESG INFO -->
+<div id="s-esg" class="scr">
+<div class="box">
+  <div class="sec-title" style="margin-top:16px">⚕️ ESG Nedir?</div>
+
+  <div class="dr-card">
+    <h3>Doç. Dr. Cem Şimşek</h3>
+    <p>Harvard Medical School'da endoskopik cerrahi fellowship eğitimi almış, Türkiye'de kamu hastanelerinde ESG'yi ilk uygulayan hekim. Bariatrik endoskopi alanında Türkiye'nin resmi diplomalı ilk ve tek hekimi. 100+ bilimsel yayın, 1000+ atıf.</p>
+    <div class="dr-badges">
+      <span class="dr-badge">Harvard Fellowship</span>
+      <span class="dr-badge">ASGE Uluslararası Komite</span>
+      <span class="dr-badge">UEG Türkiye Temsilcisi</span>
+      <span class="dr-badge">GastroGPT Kurucusu</span>
+    </div>
+  </div>
+
+  <div class="acc" id="esgAccordion">
+
+    <div class="acc-item">
+      <button class="acc-head" onclick="toggleAcc(this)">
+        <h4>❓ Endoskopik Tüp Mide (ESG) Nedir?</h4><span class="acc-arrow">▼</span>
+      </button>
+      <div class="acc-body"><div class="acc-inner">
+        <p>Endoskopik Sleeve Gastroplasti (ESG), mide hacmini <strong>endoskopik yöntemlerle küçülten</strong> cerrahi olmayan bir işlemdir. Endoskop ağız yoluyla mideye yerleştirilir ve mide iç duvarında dikiş atılarak mide hacmi %70-80 oranında azaltılır.</p>
+        <div class="stat-row">
+          <div class="stat-box"><div class="sn">0</div><div class="sl">Cerrahi Kesi</div></div>
+          <div class="stat-box"><div class="sn">60</div><div class="sl">Dakika İşlem</div></div>
+          <div class="stat-box"><div class="sn">%70-80</div><div class="sl">Mide Küçültme</div></div>
+        </div>
+        <h5>Neden ESG?</h5>
+        <ul>
+          <li><strong>Ameliyatsız:</strong> Ağızdan endoskop yoluyla uygulanır</li>
+          <li><strong>Etkili:</strong> Kilo kaybı %15-25 arasındadır</li>
+          <li><strong>Kalıcı:</strong> Kilo kaybı ve uygulama kalıcıdır</li>
+          <li><strong>Geri Döndürülebilir:</strong> İstenirse dikişler kesilerek mide eski haline döndürülebilir</li>
+        </ul>
+      </div></div>
+    </div>
+
+    <div class="acc-item">
+      <button class="acc-head" onclick="toggleAcc(this)">
+        <h4>🔬 ESG Nasıl Çalışır?</h4><span class="acc-arrow">▼</span>
+      </button>
+      <div class="acc-body"><div class="acc-inner">
+        <h5>Mide Hacmi Küçültme</h5>
+        <p>ESG, endoskopik dikişlerle mide gövdesini daraltarak sleeve (tüp) şekli oluşturur. Bu sayede mide daha az yiyecek alabilir ve daha hızlı tokluk hissi oluşur.</p>
+        <h5>Mide Boşalmasında Gecikme</h5>
+        <p>İşlem sonrası mide boşalma hızı yavaşlar, bu da tokluk süresini uzatır ve kilo kaybıyla güçlü bir ilişki gösterir.</p>
+        <h5>Hormonal Değişiklikler</h5>
+        <p>ESG sonrası GLP-1 ve PYY (tokluk hormonları) seviyeleri artar. Bu benzersiz hormonal profil, ESG'nin uzun vadeli etkinliğine katkıda bulunur. ESG, fundus dokusunu koruduğu için bariatrik cerrahiden farklı bir mekanizma ile çalışır.</p>
+      </div></div>
+    </div>
+
+    <div class="acc-item">
+      <button class="acc-head" onclick="toggleAcc(this)">
+        <h4>📊 Etkinlik ve Kalıcılık</h4><span class="acc-arrow">▼</span>
+      </button>
+      <div class="acc-body"><div class="acc-inner">
+        <div class="stat-row">
+          <div class="stat-box"><div class="sn">%15-20</div><div class="sl">Ortalama Kilo Kaybı</div></div>
+          <div class="stat-box"><div class="sn">5 Yıl+</div><div class="sl">Kalıcılık</div></div>
+          <div class="stat-box"><div class="sn">40.000+</div><div class="sl">Dünyada Uygulama</div></div>
+        </div>
+        <h5>Başarıyı Etkileyen Faktörler</h5>
+        <ul>
+          <li>Mide boşalma hızındaki yavaşlama</li>
+          <li>Sağlıklı yaşam tarzı alışkanlıklarına uyum</li>
+          <li>İşlem sonrası beslenme ve egzersiz programına uyum</li>
+          <li>İlk bir aydaki kilo kaybı hızı</li>
+        </ul>
+        <p style="margin-top:8px">ESG, intragastrik balon tedavisine kıyasla <strong>daha fazla ve kalıcı</strong> kilo kaybı sağlar. Cerrahi sleeve gastrektomiye yakın etkinlik gösterirken, <strong>çok daha düşük komplikasyon</strong> oranlarına sahiptir.</p>
+        <h5>Komorbiditelerde İyileşme</h5>
+        <p>Kilo kaybına bağlı olarak tip 2 diyabet, hipertansiyon, hiperlipidemi, uyku apnesi gibi hastalıklarda belirgin düzelme bildirilmiştir.</p>
+      </div></div>
+    </div>
+
+    <div class="acc-item">
+      <button class="acc-head" onclick="toggleAcc(this)">
+        <h4>🛡️ Güvenlik Profili</h4><span class="acc-arrow">▼</span>
+      </button>
+      <div class="acc-body"><div class="acc-inner">
+        <div class="stat-row">
+          <div class="stat-box"><div class="sn"><%1</div><div class="sl">Ciddi Komplikasyon</div></div>
+          <div class="stat-box"><div class="sn">1600+</div><div class="sl">Analiz Edilen Vaka</div></div>
+        </div>
+        <h5>Sık Görülen Yan Etkiler (Geçici)</h5>
+        <ul>
+          <li>Bulantı ve kusma: %20-30 (ilk birkaç gün geçer)</li>
+          <li>Karın ağrısı: ~%45 (24-48 saat içinde azalır)</li>
+          <li>Şişkinlik: %10-15</li>
+        </ul>
+        <h5>Nadir Ciddi Komplikasyonlar</h5>
+        <ul>
+          <li>Perigastrik sıvı: <%1 (antibiyotik ile çözülür)</li>
+          <li>Kanama: %0.5-1 (endoskopik kontrol)</li>
+          <li>Perforasyon: <%0.1 (çok nadir)</li>
+        </ul>
+        <p style="margin-top:8px"><strong>Karşılaştırma:</strong> Bariatrik cerrahi ciddi komplikasyon oranı %5-10 iken, ESG'de bu oran %1'in altındadır.</p>
+      </div></div>
+    </div>
+
+    <div class="acc-item">
+      <button class="acc-head" onclick="toggleAcc(this)">
+        <h4>⚖️ ESG vs Cerrahi Tüp Mide</h4><span class="acc-arrow">▼</span>
+      </button>
+      <div class="acc-body"><div class="acc-inner">
+        <table class="compare-table">
+          <tr><th>Özellik</th><th>ESG</th><th>Cerrahi</th></tr>
+          <tr><td>Yöntem</td><td>Endoskopik (ağızdan)</td><td>Laparoskopik (kesi)</td></tr>
+          <tr><td>Anestezi</td><td>Genel</td><td>Genel</td></tr>
+          <tr><td>Süre</td><td>60-90 dk</td><td>60-90 dk</td></tr>
+          <tr><td>Kilo kaybı</td><td>%15-20</td><td>%20-30</td></tr>
+          <tr><td>Komplikasyon</td><td><%1</td><td>%5-10</td></tr>
+          <tr><td>İyileşme</td><td>1-3 gün</td><td>1-2 hafta</td></tr>
+          <tr><td>Geri dönüş</td><td>Mümkün</td><td>Mümkün değil</td></tr>
+          <tr><td>Tekrarlanabilir</td><td>Evet</td><td>Hayır</td></tr>
+          <tr><td>Mide anatomisi</td><td>Korunur</td><td>Değişir</td></tr>
+        </table>
+        <p style="margin-top:8px">ESG, cerrahi tedaviye alternatif olabileceği gibi, morbid obez hastalar (VKİ > 50) için <strong>cerrahiye köprü tedavisi</strong> olarak da kullanılabilir.</p>
+      </div></div>
+    </div>
+
+    <div class="acc-item">
+      <button class="acc-head" onclick="toggleAcc(this)">
+        <h4>💊 ESG vs GLP-1 İlaçlar</h4><span class="acc-arrow">▼</span>
+      </button>
+      <div class="acc-body"><div class="acc-inner">
+        <table class="compare-table">
+          <tr><th>Özellik</th><th>ESG</th><th>GLP-1</th></tr>
+          <tr><td>Uygulama</td><td>Tek seferlik işlem</td><td>Günlük/haftalık ilaç</td></tr>
+          <tr><td>Kilo kaybı</td><td>%15-20</td><td>~%10</td></tr>
+          <tr><td>Süre</td><td>Kalıcı</td><td>İlaç süresince</td></tr>
+          <tr><td>Maliyet</td><td>Tek seferlik</td><td>Sürekli</td></tr>
+          <tr><td>Geri dönüş</td><td>Mümkün</td><td>Kesilince kilo alımı</td></tr>
+          <tr><td>Ek fayda</td><td>—</td><td>Kan şekeri kontrolü</td></tr>
+          <tr><td>Yan etki</td><td>Geçici (2-3 gün)</td><td>Sürekli olabilir</td></tr>
+        </table>
+        <h5>ESG İçin İdeal Aday</h5>
+        <ul>
+          <li>VKİ 30-40 arası</li>
+          <li>Hızlı kilo kaybı isteyenler</li>
+          <li>Cerrahiden çekinenler</li>
+          <li>Uzun süreli ilaç kullanmak istemeyenler</li>
+        </ul>
+      </div></div>
+    </div>
+
+    <div class="acc-item">
+      <button class="acc-head" onclick="toggleAcc(this)">
+        <h4>🎯 Kimler İçin Uygundur?</h4><span class="acc-arrow">▼</span>
+      </button>
+      <div class="acc-body"><div class="acc-inner">
+        <h5>İdeal Adaylar</h5>
+        <ul>
+          <li>VKİ 30-40 kg/m² arası</li>
+          <li>Diyet ve egzersizle yeterli sonuç alamayanlar</li>
+          <li>Bariatrik cerrahiye uygun olmayan veya istemeyen hastalar</li>
+          <li>Morbid obez hastalar için cerrahiye hazırlık (köprü tedavisi)</li>
+        </ul>
+        <h5>ESG Uygun Olmayabilir</h5>
+        <ul>
+          <li>Daha önce üst GİS cerrahisi geçirmiş hastalar</li>
+          <li>Aktif mide ülseri veya gastrit olanlar</li>
+          <li>Kanama bozuklukları olanlar</li>
+        </ul>
+      </div></div>
+    </div>
+
+    <div class="acc-item">
+      <button class="acc-head" onclick="toggleAcc(this)">
+        <h4>❔ Sık Sorulan 10 Soru</h4><span class="acc-arrow">▼</span>
+      </button>
+      <div class="acc-body"><div class="acc-inner">
+        <h5>1. İşlem ne kadar sürer?</h5>
+        <p>Genellikle 60-90 dakika sürer.</p>
+        <h5>2. Hastanede ne kadar kalırım?</h5>
+        <p>Çoğu hasta aynı gün veya ertesi gün taburcu olur.</p>
+        <h5>3. Ne kadar sürede iyileşirim?</h5>
+        <p>Birkaç gün içinde normal aktivitelerinize dönebilirsiniz.</p>
+        <h5>4. ESG kalıcı mıdır?</h5>
+        <p>Evet, mide hacmini kalıcı olarak küçültür. Sonuçlar yaşam tarzı alışkanlıklarına bağlıdır.</p>
+        <h5>5. Ne kadar kilo verilebilir?</h5>
+        <p>İlk yıl fazla kilonun %15-20'si. Sağlıklı yaşam tarzı ile 5 yıla kadar korunabilir.</p>
+        <h5>6. Ağrılı mıdır?</h5>
+        <p>İşlem genel anestezi altında yapılır. Sonrasında 2-3 gün hafif-orta karın ağrısı olabilir.</p>
+        <h5>7. Tekrarlanabilir mi?</h5>
+        <p>Evet, gerekirse prosedür tekrarlanarak ek kilo kaybı sağlanabilir.</p>
+        <h5>8. Geri döndürülebilir mi?</h5>
+        <p>Evet, istenirse dikişler endoskopik olarak kesilerek mide eski haline getirilebilir.</p>
+        <h5>9. İşlem sonrası beslenme nasıl olmalı?</h5>
+        <p>İlk haftalarda sıvı diyet, sonra yumuşak gıdalar, 4. haftadan normal beslenme. Bu uygulamada tüm aşamalar detaylı anlatılmıştır.</p>
+        <h5>10. ESG ile tüp mide ameliyatı arasındaki fark?</h5>
+        <p>ESG cerrahi olmayan bir yöntemdir, midenin dış kısmına müdahale edilmez. Tüp mide ise cerrahi olup midenin bir kısmı tamamen çıkarılır. ESG daha az invaziv ve daha kısa iyileşme süresi sunar.</p>
+      </div></div>
+    </div>
+
+  </div>
+
+  <div class="info-card" style="text-align:center;margin-top:16px">
+    <p style="font-size:12px;color:var(--muted)">Kaynak: <a href="https://endoskopiktupmide.org" style="color:var(--bx)" target="_blank">endoskopiktupmide.org</a><br>Doç. Dr. Cem Şimşek · Bariatrik Endoskopi</p>
+  </div>
+</div>
+</div>
+
 <!-- INFO -->
 <div id="s-info" class="scr">
 <div class="box">
@@ -364,10 +594,11 @@ body{font-family:var(--sans);color:var(--body);background:var(--light);line-heig
 <div id="nav" class="nav">
 <div class="nav-in">
   <button class="nb on" data-tab="home" onclick="go('home')"><span class="ni">🏠</span>Ana Sayfa</button>
+  <button class="nb" data-tab="esg" onclick="go('esg')"><span class="ni">⚕️</span>ESG</button>
   <button class="nb" data-tab="diet" onclick="go('diet')"><span class="ni">🍽️</span>Beslenme</button>
   <button class="nb" data-tab="track" onclick="go('track')"><span class="ni">💧</span>Takip</button>
   <button class="nb" data-tab="tasks" onclick="go('tasks')"><span class="ni">✅</span>Görevler</button>
-  <button class="nb" data-tab="info" onclick="go('info')"><span class="ni">ℹ️</span>Bilgi</button>
+  <button class="nb" data-tab="info" onclick="go('info')"><span class="ni">ℹ️</span>Acil</button>
 </div>
 </div>
 
@@ -866,6 +1097,12 @@ function renderInfo(){
   const days=getDaysSinceProc()||-999;
   const thresholds=[7,14,30,90,180,365];
   el.innerHTML=FOLLOWUP.map((f,i)=>`<div class="tl-item ${days>=thresholds[i]?'done':''}"><h4>${f.time}</h4><p>${f.desc}</p></div>`).join('');
+}
+
+// ═══════ ACCORDION ═══════
+function toggleAcc(btn){
+  const item=btn.parentElement;
+  item.classList.toggle('open');
 }
 
 // ═══════ RESET ═══════
